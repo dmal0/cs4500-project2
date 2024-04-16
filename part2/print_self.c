@@ -14,7 +14,7 @@ int print_self_and_parents(void){
        function but maybe that can be for later */
     printk("Current process information:\n");
     printk("Name: %s\n", task->comm); /* comm has process name */
-    printk("ID: %d\n", task->PID);
+    printk("ID: %d\n", task->pid);
     printk("State: %ld\n", task->state);
 
     /* Traverse through parents */
@@ -25,24 +25,24 @@ int print_self_and_parents(void){
         /* Print process info */
         printk("Current process information:\n");
         printk("Name: %s\n", task->comm); /* comm has process name */
-        printk("ID: %d\n", task->PID);
+        printk("ID: %d\n", task->pid);
         printk("State: %ld\n", task->state);
     }
 
     return 0;
 }
 
-int init_module(void){
+int pself_init_module(void){
     printk(KERN_INFO "Initializing print_self kernel module...\n");
     print_self_and_parents()
     return 0;
 }
 
-void cleanup_module(void){
+void pself_cleanup_module(void){
     printk(KERN_INFO "Goodbye!\n");
 }
 
-module_init(init_module);
-module_exit(cleanup_module);
+module_init(pself_init_module);
+module_exit(pself_cleanup_module);
 
 MODULE_LICENSE("GPL");
