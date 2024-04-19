@@ -7,8 +7,8 @@
 /* Variable to hold value passed to Module */
 int myPID = 0;
 
-/* Variable to hold the names of different process states */
-char *process_state[65] = {[0 ... 64] = "UNKNOWN_STATE"};
+//Variable to hold the names of different process states
+char *process_state[65] = { [0 ... 64] = "UNKNOWN_STATE"};
 
 /* Stores argument */
 module_param(myPID, int, 0);
@@ -16,11 +16,11 @@ module_param(myPID, int, 0);
 /* Prints info about the given process and its parent processes */
 int print_given_process(int givenPID){
 
-        /* Struct that points to the given process */
-        struct task_struct *given_task;
+	/* Struct that points to the given process */
+	struct task_struct *given_task;
 
-        /* Get the process specified by the given PID */
-        given_task = pid_task(find_vpid(givenPID), PIDTYPE_PID);
+	/* Get the process specified by the given PID */
+	given_task = pid_task(find_vpid(givenPID), PIDTYPE_PID);
 
         /* Fills array with known process states */
         process_state[0] = "TASK_RUNNING";
@@ -32,35 +32,36 @@ int print_given_process(int givenPID){
         process_state[32] = "EXIT_DEAD";
         process_state[64] = "TASK_NONINTERACTIVE";
 
-        /* While the given process is not 'init' */
-        while(given_task->pid != 1){
+	/* While the given process is not 'init' */
+	while(given_task->pid != 1){
 
-              /* Print info about the given process */
-              printk("Given process information:\n");
-              printk("Name: %s\n", given_task->comm);
-              printk("ID: %d\n", given_task->pid);
-              printk(State: %s\n", process_state[ given_task->state ]);
+		/* Print info about the given process */
+		printk("Given process information:\n");
+        	printk("Name: %s\n", given_task->comm);
+        	printk("ID: %d\n", given_task->pid);
+        	printk("State: %s\n", process_state[ given_task->state ]);
 
-              /* Traverse through parents */
-              given_task = given_task->parent;
-        }
+		/* Traverse through parents */
+		given_task = given_task->parent;
 
-        /* Print info about 'init' */
+	}
+
+	/* Print info about 'init' */
         printk("Given process information:\n");
         printk("Name: %s\n", given_task->comm);
         printk("ID: %d\n", given_task->pid);
-        printk(State: %s\n", process_state[ given_task->state ]);
-        return 0;
+        printk("State: %s\n", process_state[ given_task->state ]);
+	return 0;
 }
 
 int my_init_module(void){
-        printk(KERN_INFO "Hello world!\n");
-        print_given_process(myPID);
-        return 0;
+	printk(KERN_INFO "Hello world!\n");
+	print_given_process(myPID);
+	return 0;
 }
 
 void my_cleanup_module(void){
-        printk(KERN_INFO "Goodbye world!\n");
+	printk(KERN_INFO "Goodbye world!\n");
 }
 
 module_init(my_init_module);
